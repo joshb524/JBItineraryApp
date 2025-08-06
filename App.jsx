@@ -314,9 +314,11 @@ export default function ItineraryApp() {
     <div className="max-w-4xl mx-auto p-6 font-sans">
       <h1 className="text-3xl font-extrabold mb-6 text-center">Family Trip: NYC & NJ · Aug 7–11 2025</h1>
       {itineraryData.map((day, idx) => <DaySection key={idx} day={day}/>)}
+
       <footer className="mt-12 text-center text-xs text-zinc-500">
         Built with ❤️ for Tim, Domonique, Nixon & Maddox — August 2025
       </footer>
+
     </div>
   );
 }

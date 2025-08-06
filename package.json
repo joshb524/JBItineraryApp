@@ -5,7 +5,11 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"No tests specified\"",
+
     "deploy": "gh-pages -d . --dotfiles"
+
+    "deploy": "gh-pages -d ."
+
   },
   "keywords": [],
   "author": "",
@@ -17,6 +21,10 @@
   },
   "devDependencies": {
     "gh-pages": "^6.1.1"
+
   },
   "homepage": "https://joshb524.github.io/JBItineraryApp"
+
+  }
+
 }

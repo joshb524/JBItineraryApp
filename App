@@ -1,0 +1,318 @@
+import React, { useState } from "react";
+
+/**
+ * Family Trip Itinerary App
+ * -------------------------
+ * Interactive React components rendering a 5-day family itinerary.
+ * Includes dedicated Planet Fitness and mall segments on Saturday.
+ */
+
+// ---------------------------------------------------------------------------
+// ITINERARY DATA
+// ---------------------------------------------------------------------------
+const itineraryData = [
+  // DAY 1: NYC
+  {
+    day: "Thursday, August 7 – NYC & Midtown / Lower Manhattan",
+    segments: [
+      {
+        type: "travel",
+        time: "08:30 AM",
+        summary: "Arrive EWR → Pier 83 Parking Garage, Midtown West",
+        from: "3 Brewster Rd, Newark, NJ 07114",
+        to: "559 12th Ave, New York, NY 10036",
+        duration: "40–60 min (15 mi)",
+        mode: "d",
+        details:
+          "Pick-up rental car, install car-seats, then drive via I-95 N & Lincoln Tunnel. Reserve SpotHero ~$40."
+      },
+      {
+        type: "activity",
+        time: "09:30 AM",
+        summary: "Breakfast at Times Square Diner & Grill",
+        name: "Times Square Diner & Grill",
+        description:
+          "Bustling 24-hour diner with generous portions and kids’ menu.",
+        rating: "4.4★ (3,000 reviews)",
+        suggestedDuration: "45 min",
+        pricing: "$$ (~$15 pp)",
+        keyInfo: "Walk-in only; high-chairs available.",
+        address: "807 8th Ave, New York, NY 10019",
+        website: "https://www.timesquaredinerandgrill.com/"
+      },
+      {
+        type: "travel",
+        time: "10:25 AM",
+        summary: "Subway E: Port Authority → World Trade Center",
+        from: "625 8th Ave, New York, NY 10018",
+        to: "50 Church St, New York, NY 10007",
+        duration: "12 min train + 5 min walk",
+        mode: "r",
+        details:
+          "Enter at 42 St-Port Authority; downtown E seven stops to WTC; 2-minute walk to Memorial."
+      },
+      {
+        type: "activity",
+        time: "10:45 AM",
+        summary: "National 9/11 Memorial",
+        name: "9/11 Memorial Reflecting Pools",
+        description:
+          "Twin waterfall pools in the original tower footprints—solemn reflection space.",
+        rating: "4.8★",
+        suggestedDuration: "30 min",
+        pricing: "Free",
+        keyInfo: "Open 08:00–20:00; strollers allowed.",
+        address: "180 Greenwich St, New York, NY 10007",
+        website: "https://www.911memorial.org/"
+      },
+      {
+        type: "activity",
+        time: "11:30 AM",
+        summary: "One World Observatory",
+        name: "One World Observatory",
+        description:
+          "SkyPod elevators climb 1,268 ft in 47 s to 360° decks.",
+        rating: "4.7★",
+        suggestedDuration: "45–60 min",
+        pricing: "Adults $43 / Kids $37",
+        funFacts: "Sky Portal shows live street view below.",
+        keyInfo: "Arrive 10 min early; strollers allowed.",
+        address: "117 West St, New York, NY 10007",
+        website: "https://oneworldobservatory.com/"
+      },
+      {
+        type: "activity",
+        time: "12:15 PM",
+        summary: "Lunch at Eataly NYC Downtown",
+        name: "Eataly NYC Downtown",
+        description: "Italian food hall—pizza, panini, gelato.",
+        rating: "4.5★",
+        suggestedDuration: "30 min",
+        pricing: "$$ 12–18 pp",
+        keyInfo: "Elevator access; restrooms opposite checkout.",
+        address: "101 Liberty St Fl 3, New York, NY 10006",
+        website: "https://www.eataly.com/us_en/stores/nyc-downtown"
+      },
+      {
+        type: "travel",
+        time: "12:45 PM",
+        summary: "Subway/Walk: WTC → Pier 83",
+        from: "50 Church St, New York, NY 10007",
+        to: "Pier 83, W 42nd St & 12th Ave, New York, NY 10036",
+        duration: "12 min train + 15 min walk",
+        mode: "r",
+        details:
+          "Uptown E to 42 St; exit 8 Av; 0.6 mi west to pier." 
+      },
+      {
+        type: "activity",
+        time: "02:00 PM",
+        summary: "Circle Line Landmarks Cruise",
+        name: "Circle Line Sightseeing – Landmarks",
+        description: "Narrated tour past 130+ landmarks.",
+        rating: "4.6★",
+        suggestedDuration: "90 min cruise + 20 min boarding",
+        pricing: "Adults $43 / Kids $34",
+        funFacts: "60M+ riders since 1945.",
+        keyInfo: "Arrive 20 min early; indoor & open decks.",
+        address: "Pier 83, W 42nd St & 12th Ave",
+        website: "https://www.circleline.com/"
+      },
+      {
+        type: "activity",
+        time: "03:40 PM",
+        summary: "Hudson River Park – Pier 84",
+        name: "Pier 84 Playground & Splash Pad",
+        description: "Splash pad and playground.",
+        rating: "4.7★",
+        suggestedDuration: "30 min",
+        pricing: "Free",
+        keyInfo: "Bring towels; restrooms at pier house.",
+        address: "555 12th Ave, New York, NY 10036",
+        website: "https://hudsonriverpark.org/locations/pier-84/"
+      },
+      {
+        type: "activity",
+        time: "04:45 PM",
+        summary: "Early Dinner at John’s Pizzeria",
+        name: "John’s Pizzeria of Times Square",
+        description: "Coal-fired pizzas in a church setting.",
+        rating: "4.4★",
+        suggestedDuration: "45–60 min",
+        pricing: "14″ pie $25",
+        keyInfo: "Whole pies only; reservations recommended.",
+        address: "260 W 44th St, New York, NY 10036",
+        website: "https://www.johnspizzerianyc.com/"
+      },
+      {
+        type: "travel",
+        time: "05:45 PM",
+        summary: "Drive to Vernon, NJ Airbnb",
+        from: "559 12th Ave, New York, NY 10036",
+        to: "Vernon Township, NJ 07462",
+        duration: "1h 40m (52 mi)",
+        mode: "d",
+        details: "West Side Hwy & Lincoln Tunnel → I-280 W → Route 23 N."
+      }
+    ]
+  },
+
+  // DAY 2: Relaxed Options
+  {
+    day: "Friday, August 8 – Relaxed Day Near Crystal Springs",
+    segments: [
+      {
+        type: "activity",
+        time: "Flexible",
+        summary: "Local Attractions",
+        options: [
+          { name: "Mountain Creek Waterpark", description: "Slides & wave pool.", rating: "3.5★", suggestedDuration: "3–5h", pricing: "$50/$40", address: "200 Route 94, Vernon NJ 07462", website: "https://mountaincreek.com/", mode: "d" },
+          { name: "Franklin Mineral Museum", description: "Fluorescent minerals.", rating: "4.5★", suggestedDuration: "2h", pricing: "$39 pkg", address: "32 Evans St, Franklin NJ", website: "https://franklinmineralmuseum.org/", mode: "d" },
+          { name: "Pochuck Boardwalk Hike", description: "Boardwalk & suspension bridge.", rating: "5★", suggestedDuration: "1–1.5h", pricing: "Free", address: "893 County Rd 517, Vernon NJ", mode: "d" },
+          { name: "Warwick, NY Outing", description: "Market, playground & ice cream.", rating: "5★", suggestedDuration: "3–4h", pricing: "Varies", address: "161 Rt94 S, Warwick NY", website: "https://theshoppesatlafayette.com/", mode: "d" },
+          { name: "Grand Cascades Mini Golf", description: "Natural grass putting.", rating: "4★", suggestedDuration: "1h", pricing: "$12 pp", address: "1 Wild Turkey Way, Hamburg NJ", mode: "d" }
+        ]
+      }
+    ]
+  },
+
+  // DAY 3: Fitness & Rehearsal
+  {
+    day: "Saturday, August 9 – Fitness & Rehearsal Dinner",
+    segments: [
+      {
+        type: "activity",
+        time: "08:00 AM",
+        summary: "Planet Fitness Workout",
+        name: "Planet Fitness – Vernon Club",
+        description: "Full gym with cardio & weights.",
+        rating: "3.2★", suggestedDuration: "1h", pricing: "$15 day-pass", keyInfo: "Black Card perks available.",
+        address: "2 Chamonix Dr, Vernon NJ 07462", website: "https://www.planetfitness.com/gyms/vernon-nj", mode: "d"
+      },
+      {
+        type: "activity",
+        time: "10:00 AM",
+        summary: "Family Brunch",
+        name: "Daily Bean Café",
+        description: "Pancakes & coffee.", suggestedDuration: "1h", pricing: "$$"
+      },
+      {
+        type: "activity",
+        time: "11:30 AM",
+        summary: "Mall Stroll & Playground",
+        name: "The Shoppes at Lafayette",
+        description: "Outdoor shops & green lawn.", rating: "4★", suggestedDuration: "1–2h", pricing: "Free entry", keyInfo: "Restrooms by gazebo.",
+        address: "75 NJ-15, Lafayette NJ 07848", website: "https://theshoppesatlafayette.com/", mode: "d"
+      },
+      {
+        type: "activity",
+        time: "04:30 PM",
+        summary: "Rehearsal & Dinner",
+        name: "Rehearsal Dinner",
+        description: "Wedding party rehearsal.", suggestedDuration: "4h", pricing: "Included"
+      }
+    ]
+  },
+
+  // DAY 4: Wedding
+  {
+    day: "Sunday, August 10 – Wedding Day at Crystal Springs",
+    segments: [
+      {
+        type: "activity",
+        time: "All Day",
+        summary: "Tim & Dom’s Wedding",
+        name: "Wedding Ceremony & Reception",
+        description: "Celebration at Crystal Springs Resort.", rating: "∞ happiness", suggestedDuration: "12h" }
+    ]
+  },
+
+  // DAY 5: Departure
+  {
+    day: "Monday, August 11 – Heading Home (NJ → RDU)",
+    segments: [
+      { type: "activity", time: "Morning", summary: "Pack & Breakfast", name: "Pack-up & Breakfast", description: "Kitchen meal or bagels.", suggestedDuration: "2h" },
+      { type: "travel", time: "10:30 AM", summary: "Drive to EWR", from: "Vernon, NJ 07462", to: "3 Brewster Rd, Newark NJ 07114", duration: "1h15m", mode: "d", details: "I-80 & I-280; gas stop." },
+      { type: "activity", time: "01:00 PM", summary: "Airport Check-in", name: "EWR Pre-flight", description: "Rental return & TSA.", suggestedDuration: "1h" },
+      { type: "travel", time: "03:59 PM", summary: "Flight to RDU", from: "EWR", to: "RDU", duration: "1h45m flight", mode: "r", details: "Board ~3:15 PM; snacks." }
+    ]
+  }
+];
+
+// ---------------------------------------------------------------------------
+// Apple Maps Link Builder
+// ---------------------------------------------------------------------------
+const appleMapsLink = (from, to, mode = "d") =>
+  `https://maps.apple.com/?saddr=${encodeURIComponent(from)}&daddr=${encodeURIComponent(to)}&dirflg=${mode}`;
+
+// ---------------------------------------------------------------------------
+// UI COMPONENTS
+// ---------------------------------------------------------------------------
+function Accordion({ title, children }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="border rounded-2xl shadow-sm mb-4">
+      <button onClick={() => setOpen(!open)} className="w-full flex justify-between items-center p-4 bg-gray-100 hover:bg-gray-200 rounded-2xl">
+        <span className="font-semibold text-left mr-2">{title}</span>
+        <svg className={`w-5 h-5 transition-transform ${open ? "rotate-180" : "rotate-0"}`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+      </button>
+      {open && <div className="p-4 bg-white">{children}</div>}
+    </div>
+  );
+}
+
+function TravelBlock({ segment }) {
+  return (
+    <div className="flex items-start mb-6 pl-4 relative">
+      <div className="absolute left-0 top-2 flex flex-col items-center">
+        <span className="w-3 h-3 bg-blue-500 rounded-full" />
+        <span className="flex-1 w-px bg-blue-300" />
+      </div>
+      <div className="ml-6">
+        <p className="text-sm font-medium text-gray-600 mb-1">{segment.time} · {segment.duration}</p>
+        <p className="font-semibold">{segment.summary}</p>
+        {segment.details && <p className="text-sm text-gray-700 mt-1">{segment.details}</p>}
+        <a href={appleMapsLink(segment.from, segment.to, segment.mode)} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline text-sm mt-2 inline-block">Open in Apple Maps</a>
+      </div>
+    </div>
+  );
+}
+
+function ActivityCard({ segment, optionIdx }) {
+  const prefix = optionIdx !== undefined ? `Activity Option ${optionIdx+1} – ` : "";
+  const title = prefix + (segment.name || segment.summary);
+  return (
+    <Accordion title={title}>
+      <div className="space-y-2">
+        {segment.description && <p>{segment.description}</p>}
+        <ul className="list-disc list-inside text-sm">
+          {segment.rating && <li><strong>Rating:</strong> {segment.rating}</li>}          
+          {segment.suggestedDuration && <li><strong>Duration:</strong> {segment.suggestedDuration}</li>}
+          {segment.pricing && <li><strong>Pricing:</strong> {segment.pricing}</li>}
+          {segment.keyInfo && <li><strong>Key info:</strong> {segment.keyInfo}</li>}
+          {segment.address && <li><strong>Address:</strong> {segment.address}</li>}
+        </ul>
+        {segment.website && <a href={segment.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline text-sm">Official website</a>}
+      </div>
+    </Accordion>
+  );
+}
+
+function DaySection({ day }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="mb-8">
+      <button onClick={() => setOpen(!open)} className="text-xl font-bold bg-indigo-600 text-white px-5 py-3 rounded-2xl shadow-lg w-full text-left hover:bg-indigo-700">{day.day}</button>
+      {open && <div className="mt-4 ml-2 border-l-2 border-blue-200 pl-4">{day.segments.map((seg, idx) => seg.type === "travel" ? <TravelBlock key={idx} segment={seg} /> : seg.options ? <div key={idx} className="mb-6"><p className="font-semibold mb-2">{seg.time} – {seg.summary}</p>{seg.options.map((opt,o) => <ActivityCard key={o} segment={opt} optionIdx={o}/> )}</div> : <ActivityCard key={idx} segment={seg}/>)}</div>}
+    </div>
+  );
+}
+
+export default function ItineraryApp() {
+  return (
+    <div className="max-w-4xl mx-auto p-6 font-sans">
+      <h1 className="text-3xl font-extrabold mb-6 text-center">Family Trip: NYC & NJ · Aug 7–11 2025</h1>
+      {itineraryData.map((day, idx) => <DaySection key={idx} day={day}/>)}
+    </div>
+  );
+}

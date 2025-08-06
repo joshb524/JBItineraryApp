@@ -1,18 +1,21 @@
-import React, { useState } from "react";
-import ReactDOM from "react-dom/client";
-
-/**
- * Family Trip Itinerary App
- * -------------------------
- * Interactive React components rendering a 5-day family itinerary.
- * Includes dedicated Planet Fitness and mall segments on Saturday.
+/** 
+ * Family Trip Itinerary App (no-build version)
+ * --------------------------------------------
+ * Runs directly in the browser with Babel-standalone.
+ * React & ReactDOM are loaded globally via UMD CDN scripts in index.html,
+ * so we don’t use any ES-module import/export syntax here.
  */
 
-// ---------------------------------------------------------------------------
-// ITINERARY DATA
-// ---------------------------------------------------------------------------
+/* -------------------------------------------
+   React hooks from global React object
+------------------------------------------- */
+const { useState } = React;
+
+/* -------------------------------------------
+   ITINERARY DATA
+------------------------------------------- */
 const itineraryData = [
-  // DAY 1: NYC
+  // ─── DAY 1 ──────────────────────────────────────────────
   {
     day: "Thursday, August 7 – NYC & Midtown / Lower Manhattan",
     segments: [
@@ -21,19 +24,17 @@ const itineraryData = [
         time: "10:00 AM",
         summary: "Leave EWR for Midtown parking",
         from: "3 Brewster Rd, Newark, NJ 07114",
-        to: "559 12th Ave, New York, NY 10036",
+        to:   "559 12th Ave, New York, NY 10036",
         duration: "40–60 min (15 mi)",
         mode: "d",
-        details:
-          "Pick-up rental car, install car-seats, then drive via I-95 N & Lincoln Tunnel. Reserve SpotHero ~$40."
+        details: "Pick-up rental car, install car-seats, then drive via I-95 N & Lincoln Tunnel. Reserve SpotHero ~$40."
       },
       {
         type: "activity",
         time: "11:00 AM",
         summary: "Breakfast at Times Square Diner & Grill",
         name: "Times Square Diner & Grill",
-        description:
-          "Bustling 24-hour diner with generous portions and kids’ menu.",
+        description: "Bustling 24-hour diner with generous portions and kids’ menu.",
         rating: "4.4★ (3,000 reviews)",
         suggestedDuration: "45 min",
         pricing: "$$ (~$15 pp)",
@@ -46,19 +47,17 @@ const itineraryData = [
         time: "11:55 AM",
         summary: "Subway to WTC & walk",
         from: "625 8th Ave, New York, NY 10018",
-        to: "50 Church St, New York, NY 10007",
+        to:   "50 Church St, New York, NY 10007",
         duration: "20 min train + walk",
         mode: "r",
-        details:
-          "Enter at 42 St-Port Authority; downtown E seven stops to WTC; 2-minute walk to Memorial."
+        details: "Enter at 42 St-Port Authority; downtown E seven stops to WTC; 2-minute walk to Memorial."
       },
       {
         type: "activity",
         time: "12:15 PM",
         summary: "National 9/11 Memorial",
         name: "9/11 Memorial Reflecting Pools",
-        description:
-          "Twin waterfall pools in the original tower footprints—solemn reflection space.",
+        description: "Twin waterfall pools in the original tower footprints—solemn reflection space.",
         rating: "4.8★",
         suggestedDuration: "30 min",
         pricing: "Free",
@@ -71,8 +70,7 @@ const itineraryData = [
         time: "12:45 PM",
         summary: "One World Observatory",
         name: "One World Observatory",
-        description:
-          "SkyPod elevators climb 1,268 ft in 47 s to 360° decks.",
+        description: "SkyPod elevators climb 1,268 ft in 47 s to 360° decks.",
         rating: "4.7★",
         suggestedDuration: "45–60 min",
         pricing: "Adults $43 / Kids $37",
@@ -99,11 +97,10 @@ const itineraryData = [
         time: "02:15 PM",
         summary: "Subway/Walk: WTC → Pier 83",
         from: "50 Church St, New York, NY 10007",
-        to: "Pier 83, W 42nd St & 12th Ave, New York, NY 10036",
+        to:   "Pier 83, W 42nd St & 12th Ave, New York, NY 10036",
         duration: "12 min train + 15 min walk",
         mode: "r",
-        details:
-          "Uptown E to 42 St; exit 8 Av; 0.6 mi west to pier for 2:30 PM check-in."
+        details: "Uptown E to 42 St; exit 8 Av; 0.6 mi west to pier for 2:30 PM check-in."
       },
       {
         type: "activity",
@@ -114,7 +111,7 @@ const itineraryData = [
         rating: "4.6★",
         suggestedDuration: "90 min cruise + 30 min check-in",
         pricing: "Adults $43 / Kids $34",
-        funFacts: "60M+ riders since 1945.",
+        funFacts: "60 M+ riders since 1945.",
         keyInfo: "Arrive 30 min early for check-in; indoor & open decks.",
         address: "Pier 83, W 42nd St & 12th Ave",
         website: "https://www.circleline.com/"
@@ -150,15 +147,15 @@ const itineraryData = [
         time: "06:30 PM",
         summary: "Drive to Airbnb, ETA ~8:10 PM",
         from: "559 12th Ave, New York, NY 10036",
-        to: "Vernon Township, NJ 07462",
-        duration: "1h 40m (52 mi)",
+        to:   "Vernon Township, NJ 07462",
+        duration: "1 h 40 m (52 mi)",
         mode: "d",
         details: "West Side Hwy & Lincoln Tunnel → I-280 W → Route 23 N."
       }
     ]
   },
 
-  // DAY 2: Relaxed Options
+  // ─── DAY 2 ──────────────────────────────────────────────
   {
     day: "Friday, August 8 – Relaxed Day Near Crystal Springs",
     segments: [
@@ -167,17 +164,17 @@ const itineraryData = [
         time: "Flexible",
         summary: "Local Attractions",
         options: [
-          { name: "Mountain Creek Waterpark", description: "Slides & wave pool.", rating: "3.5★", suggestedDuration: "3–5h", pricing: "$50/$40", address: "200 Route 94, Vernon NJ 07462", website: "https://mountaincreek.com/", mode: "d" },
-          { name: "Franklin Mineral Museum", description: "Fluorescent minerals.", rating: "4.5★", suggestedDuration: "2h", pricing: "$39 pkg", address: "32 Evans St, Franklin NJ", website: "https://franklinmineralmuseum.org/", mode: "d" },
-          { name: "Pochuck Boardwalk Hike", description: "Boardwalk & suspension bridge.", rating: "5★", suggestedDuration: "1–1.5h", pricing: "Free", address: "893 County Rd 517, Vernon NJ", mode: "d" },
-          { name: "Warwick, NY Outing", description: "Market, playground & ice cream.", rating: "5★", suggestedDuration: "3–4h", pricing: "Varies", address: "161 Rt94 S, Warwick NY", website: "https://theshoppesatlafayette.com/", mode: "d" },
-          { name: "Grand Cascades Mini Golf", description: "Natural grass putting.", rating: "4★", suggestedDuration: "1h", pricing: "$12 pp", address: "1 Wild Turkey Way, Hamburg NJ", mode: "d" }
+          { name: "Mountain Creek Waterpark", description: "Slides & wave pool.", rating: "3.5★", suggestedDuration: "3–5 h", pricing: "$50/$40", address: "200 Route 94, Vernon NJ 07462", website: "https://mountaincreek.com/", mode: "d" },
+          { name: "Franklin Mineral Museum",  description: "Fluorescent minerals.", rating: "4.5★", suggestedDuration: "2 h",  pricing: "$39 pkg", address: "32 Evans St, Franklin NJ", website: "https://franklinmineralmuseum.org/", mode: "d" },
+          { name: "Pochuck Boardwalk Hike",   description: "Boardwalk & suspension bridge.", rating: "5★", suggestedDuration: "1–1.5 h", pricing: "Free", address: "893 County Rd 517, Vernon NJ", mode: "d" },
+          { name: "Warwick, NY Outing",       description: "Market, playground & ice cream.", rating: "5★", suggestedDuration: "3–4 h", pricing: "Varies", address: "161 Rt94 S, Warwick NY", website: "https://theshoppesatlafayette.com/", mode: "d" },
+          { name: "Grand Cascades Mini Golf", description: "Natural grass putting.", rating: "4★", suggestedDuration: "1 h", pricing: "$12 pp", address: "1 Wild Turkey Way, Hamburg NJ", mode: "d" }
         ]
       }
     ]
   },
 
-  // DAY 3: Fitness & Rehearsal
+  // ─── DAY 3 ──────────────────────────────────────────────
   {
     day: "Saturday, August 9 – Fitness & Rehearsal Dinner",
     segments: [
@@ -187,35 +184,50 @@ const itineraryData = [
         summary: "Planet Fitness Workout",
         name: "Planet Fitness – Vernon Club",
         description: "Full gym with cardio & weights.",
-        rating: "3.2★", suggestedDuration: "1h", pricing: "$15 day-pass", keyInfo: "Black Card perks available.",
-        address: "2 Chamonix Dr, Vernon NJ 07462", website: "https://www.planetfitness.com/gyms/vernon-nj", mode: "d"
+        rating: "3.2★",
+        suggestedDuration: "1 h",
+        pricing: "$15 day-pass",
+        keyInfo: "Black Card perks available.",
+        address: "2 Chamonix Dr, Vernon NJ 07462",
+        website: "https://www.planetfitness.com/gyms/vernon-nj",
+        mode: "d"
       },
       {
         type: "activity",
         time: "10:00 AM",
         summary: "Family Brunch",
         name: "Daily Bean Café",
-        description: "Pancakes & coffee.", suggestedDuration: "1h", pricing: "$$"
+        description: "Pancakes & coffee.",
+        suggestedDuration: "1 h",
+        pricing: "$$"
       },
       {
         type: "activity",
         time: "11:30 AM",
         summary: "Mall Stroll & Playground",
         name: "The Shoppes at Lafayette",
-        description: "Outdoor shops & green lawn.", rating: "4★", suggestedDuration: "1–2h", pricing: "Free entry", keyInfo: "Restrooms by gazebo.",
-        address: "75 NJ-15, Lafayette NJ 07848", website: "https://theshoppesatlafayette.com/", mode: "d"
+        description: "Outdoor shops & green lawn.",
+        rating: "4★",
+        suggestedDuration: "1–2 h",
+        pricing: "Free entry",
+        keyInfo: "Restrooms by gazebo.",
+        address: "75 NJ-15, Lafayette NJ 07848",
+        website: "https://theshoppesatlafayette.com/",
+        mode: "d"
       },
       {
         type: "activity",
         time: "04:30 PM",
         summary: "Rehearsal & Dinner",
         name: "Rehearsal Dinner",
-        description: "Wedding party rehearsal.", suggestedDuration: "4h", pricing: "Included"
+        description: "Wedding party rehearsal.",
+        suggestedDuration: "4 h",
+        pricing: "Included"
       }
     ]
   },
 
-  // DAY 4: Wedding
+  // ─── DAY 4 ──────────────────────────────────────────────
   {
     day: "Sunday, August 10 – Wedding Day at Crystal Springs",
     segments: [
@@ -224,38 +236,84 @@ const itineraryData = [
         time: "All Day",
         summary: "Tim & Dom’s Wedding",
         name: "Wedding Ceremony & Reception",
-        description: "Celebration at Crystal Springs Resort.", rating: "∞ happiness", suggestedDuration: "12h" }
+        description: "Celebration at Crystal Springs Resort.",
+        rating: "∞ happiness",
+        suggestedDuration: "12 h"
+      }
     ]
   },
 
-  // DAY 5: Departure
+  // ─── DAY 5 ──────────────────────────────────────────────
   {
     day: "Monday, August 11 – Heading Home (NJ → RDU)",
     segments: [
-      { type: "activity", time: "Morning", summary: "Pack & Breakfast", name: "Pack-up & Breakfast", description: "Kitchen meal or bagels.", suggestedDuration: "2h" },
-      { type: "travel", time: "10:30 AM", summary: "Drive to EWR", from: "Vernon, NJ 07462", to: "3 Brewster Rd, Newark NJ 07114", duration: "1h15m", mode: "d", details: "I-80 & I-280; gas stop." },
-      { type: "activity", time: "01:00 PM", summary: "Airport Check-in", name: "EWR Pre-flight", description: "Rental return & TSA.", suggestedDuration: "1h" },
-      { type: "travel", time: "03:59 PM", summary: "Flight to RDU", from: "EWR", to: "RDU", duration: "1h45m flight", mode: "r", details: "Board ~3:15 PM; snacks." }
+      {
+        type: "activity",
+        time: "Morning",
+        summary: "Pack & Breakfast",
+        name: "Pack-up & Breakfast",
+        description: "Kitchen meal or bagels.",
+        suggestedDuration: "2 h"
+      },
+      {
+        type: "travel",
+        time: "10:30 AM",
+        summary: "Drive to EWR",
+        from: "Vernon, NJ 07462",
+        to:   "3 Brewster Rd, Newark NJ 07114",
+        duration: "1 h 15 m",
+        mode: "d",
+        details: "I-80 & I-280; gas stop."
+      },
+      {
+        type: "activity",
+        time: "01:00 PM",
+        summary: "Airport Check-in",
+        name: "EWR Pre-flight",
+        description: "Rental return & TSA.",
+        suggestedDuration: "1 h"
+      },
+      {
+        type: "travel",
+        time: "03:59 PM",
+        summary: "Flight to RDU",
+        from: "EWR",
+        to:   "RDU",
+        duration: "1 h 45 m flight",
+        mode: "r",
+        details: "Board ~3:15 PM; snacks."
+      }
     ]
   }
 ];
 
-// ---------------------------------------------------------------------------
-// Apple Maps Link Builder
-// ---------------------------------------------------------------------------
+/* -------------------------------------------
+   Helpers
+------------------------------------------- */
 const appleMapsLink = (from, to, mode = "d") =>
   `https://maps.apple.com/?saddr=${encodeURIComponent(from)}&daddr=${encodeURIComponent(to)}&dirflg=${mode}`;
 
-// ---------------------------------------------------------------------------
-// UI COMPONENTS
-// ---------------------------------------------------------------------------
+/* -------------------------------------------
+   UI Components
+------------------------------------------- */
 function Accordion({ title, children }) {
   const [open, setOpen] = useState(false);
   return (
     <div className="border rounded-2xl shadow-sm mb-4">
-      <button onClick={() => setOpen(!open)} className="w-full flex justify-between items-center p-4 bg-gray-100 hover:bg-gray-200 rounded-2xl">
+      <button
+        onClick={() => setOpen(!open)}
+        className="w-full flex justify-between items-center p-4 bg-gray-100 hover:bg-gray-200 rounded-2xl"
+      >
         <span className="font-semibold text-left mr-2">{title}</span>
-        <svg className={`w-5 h-5 transition-transform ${open ? "rotate-180" : "rotate-0"}`} xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+        <svg
+          className={`w-5 h-5 transition-transform ${open ? "rotate-180" : "rotate-0"}`}
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
       </button>
       {open && <div className="p-4 bg-white">{children}</div>}
     </div>
@@ -270,30 +328,71 @@ function TravelBlock({ segment }) {
         <span className="flex-1 w-px bg-blue-300" />
       </div>
       <div className="ml-6">
-        <p className="text-sm font-medium text-gray-600 mb-1">{segment.time} · {segment.duration}</p>
+        <p className="text-sm font-medium text-gray-600 mb-1">
+          {segment.time} · {segment.duration}
+        </p>
         <p className="font-semibold">{segment.summary}</p>
-        {segment.details && <p className="text-sm text-gray-700 mt-1">{segment.details}</p>}
-        <a href={appleMapsLink(segment.from, segment.to, segment.mode)} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline text-sm mt-2 inline-block">Open in Apple Maps</a>
+        {segment.details && (
+          <p className="text-sm text-gray-700 mt-1">{segment.details}</p>
+        )}
+        <a
+          href={appleMapsLink(segment.from, segment.to, segment.mode)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 underline text-sm mt-2 inline-block"
+        >
+          Open in Apple Maps
+        </a>
       </div>
     </div>
   );
 }
 
 function ActivityCard({ segment, optionIdx }) {
-  const prefix = optionIdx !== undefined ? `Activity Option ${optionIdx+1} – ` : "";
+  const prefix =
+    optionIdx !== undefined ? `Activity Option ${optionIdx + 1} – ` : "";
   const title = prefix + (segment.name || segment.summary);
   return (
     <Accordion title={title}>
       <div className="space-y-2">
         {segment.description && <p>{segment.description}</p>}
         <ul className="list-disc list-inside text-sm">
-          {segment.rating && <li><strong>Rating:</strong> {segment.rating}</li>}          
-          {segment.suggestedDuration && <li><strong>Duration:</strong> {segment.suggestedDuration}</li>}
-          {segment.pricing && <li><strong>Pricing:</strong> {segment.pricing}</li>}
-          {segment.keyInfo && <li><strong>Key info:</strong> {segment.keyInfo}</li>}
-          {segment.address && <li><strong>Address:</strong> {segment.address}</li>}
+          {segment.rating && (
+            <li>
+              <strong>Rating:</strong> {segment.rating}
+            </li>
+          )}
+          {segment.suggestedDuration && (
+            <li>
+              <strong>Duration:</strong> {segment.suggestedDuration}
+            </li>
+          )}
+          {segment.pricing && (
+            <li>
+              <strong>Pricing:</strong> {segment.pricing}
+            </li>
+          )}
+          {segment.keyInfo && (
+            <li>
+              <strong>Key info:</strong> {segment.keyInfo}
+            </li>
+          )}
+          {segment.address && (
+            <li>
+              <strong>Address:</strong> {segment.address}
+            </li>
+          )}
         </ul>
-        {segment.website && <a href={segment.website} target="_blank" rel="noopener noreferrer" className="text-blue-600 underline text-sm">Official website</a>}
+        {segment.website && (
+          <a
+            href={segment.website}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 underline text-sm"
+          >
+            Official website
+          </a>
+        )}
       </div>
     </Accordion>
   );
@@ -303,25 +402,57 @@ function DaySection({ day }) {
   const [open, setOpen] = useState(false);
   return (
     <div className="mb-8">
-      <button onClick={() => setOpen(!open)} className="text-xl font-bold bg-indigo-600 text-white px-5 py-3 rounded-2xl shadow-lg w-full text-left hover:bg-indigo-700">{day.day}</button>
-      {open && <div className="mt-4 ml-2 border-l-2 border-blue-200 pl-4">{day.segments.map((seg, idx) => seg.type === "travel" ? <TravelBlock key={idx} segment={seg} /> : seg.options ? <div key={idx} className="mb-6"><p className="font-semibold mb-2">{seg.time} – {seg.summary}</p>{seg.options.map((opt,o) => <ActivityCard key={o} segment={opt} optionIdx={o}/> )}</div> : <ActivityCard key={idx} segment={seg}/>)}</div>}
+      <button
+        onClick={() => setOpen(!open)}
+        className="text-xl font-bold bg-indigo-600 text-white px-5 py-3 rounded-2xl shadow-lg w-full text-left hover:bg-indigo-700"
+      >
+        {day.day}
+      </button>
+      {open && (
+        <div className="mt-4 ml-2 border-l-2 border-blue-200 pl-4">
+          {day.segments.map((seg, idx) =>
+            seg.type === "travel" ? (
+              <TravelBlock key={idx} segment={seg} />
+            ) : seg.options ? (
+              <div key={idx} className="mb-6">
+                <p className="font-semibold mb-2">
+                  {seg.time} – {seg.summary}
+                </p>
+                {seg.options.map((opt, o) => (
+                  <ActivityCard key={o} segment={opt} optionIdx={o} />
+                ))}
+              </div>
+            ) : (
+              <ActivityCard key={idx} segment={seg} />
+            )
+          )}
+        </div>
+      )}
     </div>
   );
 }
 
-export default function ItineraryApp() {
+/* -------------------------------------------
+   Root App
+------------------------------------------- */
+function ItineraryApp() {
   return (
     <div className="max-w-4xl mx-auto p-6 font-sans">
-      <h1 className="text-3xl font-extrabold mb-6 text-center">Family Trip: NYC & NJ · Aug 7–11 2025</h1>
-      {itineraryData.map((day, idx) => <DaySection key={idx} day={day}/>)}
+      <h1 className="text-3xl font-extrabold mb-6 text-center">
+        Family Trip: NYC & NJ · Aug 7–11 2025
+      </h1>
+      {itineraryData.map((day, idx) => (
+        <DaySection key={idx} day={day} />
+      ))}
 
       <footer className="mt-12 text-center text-xs text-zinc-500">
-        Built with ❤️ for Tim, Domonique, Nixon & Maddox — August 2025
+        Built with ❤️ for Tim, Domonique, Nixon & Maddox — August 2025
       </footer>
-
     </div>
   );
 }
 
-const root = ReactDOM.createRoot(document.getElementById("root"));
-root.render(<ItineraryApp />);
+/* -------------------------------------------
+   Mount React
+------------------------------------------- */
+ReactDOM.createRoot(document.getElementById("root")).render(<ItineraryApp />);

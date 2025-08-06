@@ -446,7 +446,7 @@ function ItineraryApp() {
       ))}
 
       <footer className="mt-12 text-center text-xs text-zinc-500">
-        Built with ❤️ for Tim, Domonique, Nixon & Maddox — August 2025
+        Made with ❤️ for Tim, Dom, Nixon & Maddox — August 2025
       </footer>
     </div>
   );

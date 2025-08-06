@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import ReactDOM from "react-dom/client";
 
 /**
  * Family Trip Itinerary App
@@ -17,8 +18,8 @@ const itineraryData = [
     segments: [
       {
         type: "travel",
-        time: "08:30 AM",
-        summary: "Arrive EWR → Pier 83 Parking Garage, Midtown West",
+        time: "10:00 AM",
+        summary: "Leave EWR for Midtown parking",
         from: "3 Brewster Rd, Newark, NJ 07114",
         to: "559 12th Ave, New York, NY 10036",
         duration: "40–60 min (15 mi)",
@@ -28,7 +29,7 @@ const itineraryData = [
       },
       {
         type: "activity",
-        time: "09:30 AM",
+        time: "11:00 AM",
         summary: "Breakfast at Times Square Diner & Grill",
         name: "Times Square Diner & Grill",
         description:
@@ -42,18 +43,18 @@ const itineraryData = [
       },
       {
         type: "travel",
-        time: "10:25 AM",
-        summary: "Subway E: Port Authority → World Trade Center",
+        time: "11:55 AM",
+        summary: "Subway to WTC & walk",
         from: "625 8th Ave, New York, NY 10018",
         to: "50 Church St, New York, NY 10007",
-        duration: "12 min train + 5 min walk",
+        duration: "20 min train + walk",
         mode: "r",
         details:
           "Enter at 42 St-Port Authority; downtown E seven stops to WTC; 2-minute walk to Memorial."
       },
       {
         type: "activity",
-        time: "10:45 AM",
+        time: "12:15 PM",
         summary: "National 9/11 Memorial",
         name: "9/11 Memorial Reflecting Pools",
         description:
@@ -67,7 +68,7 @@ const itineraryData = [
       },
       {
         type: "activity",
-        time: "11:30 AM",
+        time: "12:45 PM",
         summary: "One World Observatory",
         name: "One World Observatory",
         description:
@@ -82,8 +83,8 @@ const itineraryData = [
       },
       {
         type: "activity",
-        time: "12:15 PM",
-        summary: "Lunch at Eataly NYC Downtown",
+        time: "01:45 PM",
+        summary: "Quick lunch at Eataly NYC Downtown",
         name: "Eataly NYC Downtown",
         description: "Italian food hall—pizza, panini, gelato.",
         rating: "4.5★",
@@ -95,33 +96,33 @@ const itineraryData = [
       },
       {
         type: "travel",
-        time: "12:45 PM",
+        time: "02:15 PM",
         summary: "Subway/Walk: WTC → Pier 83",
         from: "50 Church St, New York, NY 10007",
         to: "Pier 83, W 42nd St & 12th Ave, New York, NY 10036",
         duration: "12 min train + 15 min walk",
         mode: "r",
         details:
-          "Uptown E to 42 St; exit 8 Av; 0.6 mi west to pier." 
+          "Uptown E to 42 St; exit 8 Av; 0.6 mi west to pier for 2:30 PM check-in."
       },
       {
         type: "activity",
-        time: "02:00 PM",
+        time: "03:00 PM",
         summary: "Circle Line Landmarks Cruise",
         name: "Circle Line Sightseeing – Landmarks",
         description: "Narrated tour past 130+ landmarks.",
         rating: "4.6★",
-        suggestedDuration: "90 min cruise + 20 min boarding",
+        suggestedDuration: "90 min cruise + 30 min check-in",
         pricing: "Adults $43 / Kids $34",
         funFacts: "60M+ riders since 1945.",
-        keyInfo: "Arrive 20 min early; indoor & open decks.",
+        keyInfo: "Arrive 30 min early for check-in; indoor & open decks.",
         address: "Pier 83, W 42nd St & 12th Ave",
         website: "https://www.circleline.com/"
       },
       {
         type: "activity",
-        time: "03:40 PM",
-        summary: "Hudson River Park – Pier 84",
+        time: "04:35 PM",
+        summary: "Pier 84 playground splash",
         name: "Pier 84 Playground & Splash Pad",
         description: "Splash pad and playground.",
         rating: "4.7★",
@@ -133,7 +134,7 @@ const itineraryData = [
       },
       {
         type: "activity",
-        time: "04:45 PM",
+        time: "05:15 PM",
         summary: "Early Dinner at John’s Pizzeria",
         name: "John’s Pizzeria of Times Square",
         description: "Coal-fired pizzas in a church setting.",
@@ -146,8 +147,8 @@ const itineraryData = [
       },
       {
         type: "travel",
-        time: "05:45 PM",
-        summary: "Drive to Vernon, NJ Airbnb",
+        time: "06:30 PM",
+        summary: "Drive to Airbnb, ETA ~8:10 PM",
         from: "559 12th Ave, New York, NY 10036",
         to: "Vernon Township, NJ 07462",
         duration: "1h 40m (52 mi)",
@@ -316,3 +317,6 @@ export default function ItineraryApp() {
     </div>
   );
 }
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<ItineraryApp />);
